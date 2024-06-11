@@ -12,6 +12,7 @@ function App() {
   let[modal,setModal] = useState(false);
   let modalCheck = true ;
   let [userInput,inputSet] = useState('');
+  let [updateInput,updateSet] = useState('');
   return (
     <div className="App">
     <button onClick={() => {
@@ -52,6 +53,16 @@ function App() {
       listCopy.splice(i,1);
       setList(listCopy);
     }}>글 삭제</button>
+    <input onChange={(e) => 
+      {updateSet(e.target.value); 
+    }
+    }/>
+    <button onClick={() => {
+      if(updateInput !== ''){
+        listCopy[i] = updateInput;
+      }
+      setList(listCopy);
+    }}>글 수정</button>
     </div>
     )
     })    
@@ -99,4 +110,4 @@ function nowDate (){
 }
 
 
-export default App;
+export default App; 
