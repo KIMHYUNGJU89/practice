@@ -1,17 +1,16 @@
-
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 
 function App() {
-
-  let post = '강남우동맛집';
+  
   let[list,setList] = useState(['페이트 제로','페이트 스테이 나이트','페이트 엑스텔라']);
   let listCopy = [...list];
   let[good,setGood] = useState([]);
   let[title,setTitle] = useState(0);
   let[modal,setModal] = useState(false);
-  let modalCheck = true;
+  let modalCheck = true ;
+
 
   return (
     <div className="App">
@@ -43,7 +42,7 @@ function App() {
     <span onClick={() => {
       let goodCopy = [...good];
       goodCopy[i] = goodCopy[i] + 1;
-      setGood(goodCopy) 
+      setGood(goodCopy)
       }}>👍</span>{good[i]}
     </h4>
 
@@ -52,12 +51,13 @@ function App() {
     )
     })    
     }
+    <input></input>
     {
       modal == true ? <Modal title = {title} list = {list} setList = {
         () => {
         listCopy[2] = '페이트 그랜드 오더';
         setList(listCopy);
-      }
+       }
     } 
     color={'yellow'} ></Modal> : null
     }
@@ -76,7 +76,6 @@ function Modal(props) {
     </div>
   );
 }
-
 
 
 export default App;
