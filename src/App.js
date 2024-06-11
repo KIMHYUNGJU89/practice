@@ -4,70 +4,79 @@ import './App.css';
 import { useState } from 'react';
 
 function App() {
-  
-  let post = '강남 우동 맛집';
-  let [글제목,글제목변경] = useState(['남자 코트 추천','강남 우동 맛집','파이썬 독학'])
-  let [따봉,따봉변경] = useState(0);
-  let [modal,setModal] = useState(false);
+
+  let post = '강남우동맛집';
+  let[list,setList] = useState(['페이트 제로','페이트 스테이 나이트','페이트 엑스텔라']);
+  let listCopy = [...list];
+  let[good,setGood] = useState([]);
+  let[title,setTitle] = useState(0);
+  let[modal,setModal] = useState(false);
   let modalCheck = true;
-  [1,2,3].map(function(){
-    console.log(1);
-  })
-  let copy = [...글제목];
+
   return (
     <div className="App">
-      <div className="black-nav"> 
-        <h4 style={ {color : 'white', fontSize : '16px'} }>reactBlog</h4>
-      </div>
-      <button onClick=
-        {() => 
-          { 
-            let copy = [...글제목];
-            copy[0] = '여자코트 추천';
-            글제목변경(copy)
-            }}>글제목변경
-      </button>
-      <button onClick=
-        {() => 
-          {
-            let copy2 = [...글제목];
-            copy2.sort();
-            글제목변경(copy2)
-            }}>
-        가나다변경
-        </button>
+    <button onClick={() => {
+      listCopy[2] = '페이트 그랜드 오더';
+      setList(listCopy);
+    }}>글제목수정</button>
+    <button onClick={() => {
+      listCopy.sort();
+      setList(listCopy);
+    }}>가나다순변경</button>
+    {
+     listCopy.map(
+    function(titleName,i)
+    {
+    good.push(0);
+    return(
+    <div className='list'>
+    <h4 onClick={
+      () => {
         {
-         copy.map(function(a,i){
-          return ( <div className='list'>
-            <h4 onClick=
-            {() => {{modal == false ? modalCheck = true : modalCheck = false;}setModal(modalCheck);}}>
-            {글제목[i]}
-            <span onClick={() => {따봉변경(따봉+1)}}>👍</span> 
-            {따봉}
-            </h4>
-            <p>2월 17일 발행</p> 
-          </div>)
-        })
+          modal == false ? modalCheck = true : modalCheck = false;
         }
-        {
-        modal == true ? <Modal></Modal> : null
-        }
+        setTitle(i);
+        setModal(modalCheck);
+      }
+    }>
+    {titleName}
+    <span onClick={() => {
+      let goodCopy = [...good];
+      goodCopy[i] = goodCopy[i] + 1;
+      setGood(goodCopy) 
+      }}>👍</span>{good[i]}
+    </h4>
+
+    <p>2024-06-11 발행</p>
+    </div>
+    )
+    })    
+    }
+    {
+      modal == true ? <Modal title = {title} list = {list} setList = {
+        () => {
+        listCopy[2] = '페이트 그랜드 오더';
+        setList(listCopy);
+      }
+    } 
+    color={'yellow'} ></Modal> : null
+    }
     </div>
 
   );
 }
 
-function Modal() {
+function Modal(props) {
   return(
-    <>
-    <div className='modal'>
-    <h4>제목</h4>
-    <p>날짜</p>
-    <p>상세내용</p>
+    <div className='modal' style={{background : props.color}}>
+      <h4>{props.list[props.title]}</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+      <button onClick={props.setList}>글수정</button>
     </div>
-    </>
   );
 }
+
 
 
 export default App;
