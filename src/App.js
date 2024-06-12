@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import React,{ useState } from 'react';
 
 function App() {
   let dates = nowDate();
@@ -69,24 +69,25 @@ function App() {
     }
     <input onChange={(e) => 
       {inputSet(e.target.value); 
-    }
-    }/>
+        }
+        }/>
     <button onClick={()=>{
       if(userInput !== ''){
         listCopy.unshift(userInput);
         }
-      setList(listCopy);
+        setList(listCopy);
         
-    }}>글입력</button>
+        }}>글입력</button>
     {
       modal == true ? <Modal title = {title} list = {list} setList = {
         () => {
-        listCopy[2] = '페이트 그랜드 오더';
-        setList(listCopy);
-       }
-    } 
-    color={'yellow'} /> : null 
+          listCopy[2] = '페이트 그랜드 오더';
+          setList(listCopy);
+          }
+          } 
+          color={'yellow'} /> : null 
     }
+    <Modal2></Modal2>
     </div>
 
   );
@@ -102,12 +103,30 @@ function Modal(props) {
     </div>
   );
 }
-
 function nowDate (){
   let dates = new Date();
   let months = dates.getMonth()+1;
   return dates.getFullYear() + " 년 " + months+ " 월 " + dates.getDate() + " 일 ";
 }
 
-
+class Modal2 extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      name : 'kim',
+      age : 20
+    }
+  }
+  render(){
+    return(
+      <div>안녕 {this.state.age}
+      <button onClick={() =>{
+        this.setState({age : 21})
+      }}>
+        버튼
+      </button>
+      </div>
+    )
+  }
+}
 export default App; 
