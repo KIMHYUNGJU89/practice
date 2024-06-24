@@ -7,11 +7,12 @@ import Detail from './routes/Detail.js';
 
 
 function App() {
-  let navigate = useNavigate();
   let [servant,dataChange] = useState(data);
+  let navigate = useNavigate();
   let dataCopy = [...servant];
   return (
     <div className="App">
+
 
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
@@ -34,6 +35,7 @@ function App() {
        <Main></Main>
       </div>
           }/>
+        {/* : 을 치고 뒤에 아무거나 치면 /detail/fdjsakl 페이지로 나눠짐. id는 다른곳에서 파라미터값으로 받기가능 */}
         <Route path="/detail/:id" element={
           <div>
           <Detail servant = {servant}></Detail>
@@ -53,12 +55,8 @@ function App() {
         </Route>
 
 
-        <Route path="*" element={<div>빠큐</div>}/>
+        <Route path="*" element={<div>잘못된 요청입니다.</div>}/>
       </Routes>
-      <button onClick={()=>{
-        console.log(dataCopy);
-        dataChange(dataCopy);
-      }}>가나다순으로 정렬</button>
     </div>
   );
 }
@@ -66,7 +64,7 @@ function App() {
 
 
 function Main(){
-  let [servant] = useState(data);
+  let [servant,dataChange] = useState(data);
   let dataCopy = [...servant];
   useNavigate();
   return(
@@ -81,13 +79,17 @@ function Main(){
       function(servant,i)
       {
         return(
-        <Cols servant = {servant} i = {i}></Cols>
-        
+          <Cols servant = {servant} i = {i}></Cols>
+          
         )   
       }
     )
-    }
+  }
   </Row>
+  <button onClick={()=>{
+    console.log(dataCopy);
+    dataChange(dataCopy);
+  }}>가나다순으로 정렬</button>
   </Container>
   </div>
   );
