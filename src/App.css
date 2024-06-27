@@ -2,7 +2,7 @@
 
 .main-bg{
   height: 400px;
-  background-image: url('./img/main_banner.jpg');
+  background-image: url('./img/bg.png');
   background-size: cover;
   background-position: center;
 }
@@ -15,4 +15,11 @@
 .col img{
   margin-top: 10px;
   border-radius: 5%;
+}
+.start {
+  opacity: 0;
+}
+.end {
+  opacity: 1;
+  transition: opacity 2s;
 }
