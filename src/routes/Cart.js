@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeName, changeAge } from './../store/userSlice.js';
-import { changeList, minusCount, plusCount } from '../store.js';
+import { changeList, deleteItem, minusCount, plusCount } from '../store.js';
 
 function Cart() {
 
@@ -38,6 +38,7 @@ function Cart() {
                                         <button onClick={() => { dispatch(plusCount(state.cartList[i].id)) }}>+</button>
                                         <button onClick={() => { dispatch(minusCount(state.cartList[i].id)) }}>-</button>
                                     </td>
+                                    <td><button onClick={() => { dispatch(deleteItem(state.cartList[i].id))}}>삭제하기</button></td>
 
                                 </tr>
                             )

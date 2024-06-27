@@ -111,34 +111,38 @@ function Main() {
           }
         </Row>
       </Container>
-      <button onClick={() => {
-        setLoading(true);
-
-        if (count < 2) {
-
-          axios.get(urls[count])
-            .then((result) => {
-              let copy = [];
-              copy = copy.concat(...result.data);
-              setCount(count + 1);
-              setLoading(false);
-              dispatch(inMainList(copy));
-            })
-          } else {
-            alert('상품이 더 이상 없어요!');
-          }
-          console.log(state.mainData);
-          
-
-
-        // axios.post('/url',{name : kim}) 이런식으로 쓰면 서버에 데이터를 보냄
-
-        // Promise.all([axios.get('/url1'),axios.get('/url2')]) 동시에 axios요청 여러개할때 쓰는데, 두개의 요청이 
-        // 다 이루어지면 .then 코드실행
-
-        // 서버는 문자만 주고받을 수 있다.
-        // json데이터는 ""를 데이터에 넣는것으로 문자 취급 할수있기때문에 문자열이 아니라도 상관없다.
-      }}>더보기</button>
+      {
+        count < 2 ?
+        <button onClick={() => {
+          setLoading(true);
+  
+          if (count < 2) {
+  
+            axios.get(urls[count])
+              .then((result) => {
+                let copy = [];
+                copy = copy.concat(...result.data);
+                setCount(count + 1);
+                setLoading(false);
+                dispatch(inMainList(copy));
+              })
+            } else {
+              alert('상품이 더 이상 없어요!');
+            }
+            console.log(state.mainData);
+            
+  
+  
+          // axios.post('/url',{name : kim}) 이런식으로 쓰면 서버에 데이터를 보냄
+  
+          // Promise.all([axios.get('/url1'),axios.get('/url2')]) 동시에 axios요청 여러개할때 쓰는데, 두개의 요청이 
+          // 다 이루어지면 .then 코드실행
+  
+          // 서버는 문자만 주고받을 수 있다.
+          // json데이터는 ""를 데이터에 넣는것으로 문자 취급 할수있기때문에 문자열이 아니라도 상관없다.
+        }}>더보기</button>
+        : null
+      }
       {loading ? <Loading /> : null}
     </div>
   );
