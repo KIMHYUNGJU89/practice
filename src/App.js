@@ -2,26 +2,52 @@ import { createContext, useState } from 'react';
 import './App.css';
 import { Button, Navbar, Container, Nav, Row, Col } from 'react-bootstrap';
 import data from './routes/data.js';
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, Outlet, json } from 'react-router-dom';
 import Detail from './routes/Detail.js';
 import Cart from './routes/Cart.js';
 import axios from 'axios';
 import Loading from './Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { inMainList } from './store.js';
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'  
 
 
 export let Context1 = createContext();
 
 
 function App() {
+  let obj = {name : 'kim'}
+  // JSON.stringify() 는 오브젝트나 배열자료를 ""를 붙여서 json화 해주는것
+  localStorage.setItem('data', JSON.stringify(obj));
+  let 꺼낸거 = localStorage.getItem('data');
+  // console.log(꺼낸거);
+  //JSON.parse()는 json자료를 다시 오브젝트나 배열로 만들어 준는 것
+  // console.log(JSON.parse(꺼낸거));
+
+
   let state = useSelector((state) => state);
   let navigate = useNavigate();
   let [재고] = useState([10, 11, 12]);
+  
+  
+  const result = useQuery('testServer', () => 
+    axios.get('https://codingapple1.github.io/userdata.json').then
+    (
+      (response)=>{
+        console.log('요청됨')
+        return response.data 
+      }
+    )
+    //2초안에는 ajax로 정보를 받아오지않음.
+    ,{ staleTime : 2000 }    
+    
+  );
+
+
   return (
     <div className="App">
 
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar bg="white" variant='light'>
         <Container>
           <Navbar.Brand href="/"><h4>shoes shop</h4></Navbar.Brand>
           <Nav className="me-auto">
@@ -32,6 +58,7 @@ function App() {
             <Nav.Link onClick={() => { navigate('/about') }}>어바웃페이지</Nav.Link>
             <Nav.Link onClick={() => { navigate('/event') }}>Event</Nav.Link>
           </Nav>
+          <Nav className='ms-auto'>{result.isLoading ? '로딩중' : result.data.name }</Nav>
         </Container>
       </Navbar>
 
@@ -111,8 +138,7 @@ function Main() {
           }
         </Row>
       </Container>
-      {
-        count < 2 ?
+
         <button onClick={() => {
           setLoading(true);
   
@@ -125,6 +151,10 @@ function Main() {
                 setCount(count + 1);
                 setLoading(false);
                 dispatch(inMainList(copy));
+                setLoading(false);
+              })
+              .catch(()=>{
+                setLoading(false);
               })
             } else {
               alert('상품이 더 이상 없어요!');
@@ -141,8 +171,7 @@ function Main() {
           // 서버는 문자만 주고받을 수 있다.
           // json데이터는 ""를 데이터에 넣는것으로 문자 취급 할수있기때문에 문자열이 아니라도 상관없다.
         }}>더보기</button>
-        : null
-      }
+  
       {loading ? <Loading /> : null}
     </div>
   );

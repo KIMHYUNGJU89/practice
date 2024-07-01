@@ -34,7 +34,9 @@ let mainData = createSlice({
         ],
     reducers: {
         inMainList(state, action) {
-            let isDuplicate = state.some(cartItem => cartItem.id === action.payload.id);
+            let isDuplicate = action.payload.some(actionItem =>
+                state.some(stateItem => stateItem.id === actionItem.id)
+              );
             if (!isDuplicate) {
                 return state.concat(action.payload);
             }
@@ -93,11 +95,10 @@ let cartList = createSlice({
         minusCount(state, action) {
 
             let locate = state.findIndex((item) => item.id == action.payload);
-            if (state[locate].count > 0) {
-
+            if (state[locate].count > 1) {
                 state[locate].count = state[locate].count - 1;
-            } else {
-                state[locate].count = 0;
+            } else if(state[locate].count <= 1){
+                return state.filter((item) => item.id !== action.payload);
             }
         },
         changeList(state) {

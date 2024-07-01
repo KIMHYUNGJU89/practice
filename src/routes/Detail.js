@@ -6,7 +6,8 @@ import { Context1 } from './../App.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { inCartList } from "./../store.js";
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 
 
@@ -68,6 +69,19 @@ function Detail(props) {
   let { id } = useParams();
   let i = parseInt(id) + 1;
   let [ac] = useState(props.servant[id].title);
+
+  useEffect(() => {
+    if (!localStorage.getItem('watched')) {
+      localStorage.setItem('watched', JSON.stringify([]));
+    }
+  }, []);
+
+  useEffect(() => {
+    const watched = JSON.parse(localStorage.getItem('watched')) || [];
+    watched.push(props.servant[id].id);
+    const newWatched = [...new Set(watched)]; // 중복 제거
+    localStorage.setItem('watched', JSON.stringify(newWatched));
+  }, [id]);
   return (
     <div className="container">
 
@@ -83,23 +97,25 @@ function Detail(props) {
           <p>{props.servant[id].content}</p>
           <p>{props.servant[id].price}원</p>
           <button onClick={() => {
-            dispatch(inCartList({id : props.servant[id].id, name : props.servant[id].title, count : 0}));
+            dispatch(inCartList({ id: props.servant[id].id, name: props.servant[id].title, count: 1 }));
             navigate('/cart')
           }} className="btn btn-danger">주문하기</button>
           {/* <YellowBtn bg="blue">버튼</YellowBtn>
             <YellowBtn bg="green">버튼</YellowBtn> */}
         </div>
+
+
         {/* <input onChange={(e) => 
             {inputSet(e.target.value); 
             } 
-          }/> */}
+            }/> */}
 
         {/* defaultActiveKey는 페이지 처음들어갔을때 눌려있는버튼을 뜻함 */}
         <Nav variant="tabs" defaultActiveKey="link0">
           <Nav.Item>
             <Nav.Link onClick={() => {
               setTap(0);
-            }} eventKey="link0">버튼0</Nav.Link>
+            }} eventKey="link0">최근 본 상품들</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link onClick={() => {
@@ -143,10 +159,60 @@ function TabContent({ tap, ac }) {
     // start end랑 공백이 없으면 하나의 문장이 되기때문에 빈 공간이 필요하다.
     <div className={'start ' + fade}>
       {
-        [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tap]
+        [<RecentWatched/>, <div>내용1</div>, <div>내용2</div>][tap]
       }
     </div>
   );
+}
 
+function RecentWatched() {
+
+  let JsonToObject = JSON.parse(localStorage.getItem('watched'));
+  let [watched] = useState(JsonToObject);
+  let copy = [...watched];
+  let navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return (
+    <div>
+    <>
+      <br></br>
+      <Button variant="primary" onClick={handleShow}>
+       상품 보기
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <h3>최근 본 상품들</h3>
+        { 
+        copy.map(function (a, i) {
+          return (
+            <>
+              {
+                i == 0 ? <br></br> : null
+              }
+              <h4 onClick={() => { navigate('/detail/' + i) }}>{a}번상품</h4>
+              <hr></hr>
+            </>
+          )
+        })
+      }
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+    </div>
+  );
 }
 export default Detail;

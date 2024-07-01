@@ -9,7 +9,6 @@ function Cart() {
 
     let state = useSelector((state) => state);
     let dispatch = useDispatch();
-    console.log(state.cartList);
     return (
         <div>
             <h4>{state.user.name}의 장바구니</h4>
